@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -12,6 +12,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/useToast';
 import { LoadingSpinner } from '@/components/common/LoadingSpinner';
 import { MessageSquare } from 'lucide-react';
+import { useAuthStore } from '@/store/use-auth-store';
 
 const loginSchema = z.object({
   email: z.string().email('Invalid email address'),
@@ -25,6 +26,16 @@ export default function LoginPage() {
   const { login } = useAuth();
   const { success, error } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const isAuthenticated = useAuthStore(state => state.isAuthenticated);
+
+  useEffect(() => {
+    // Log whenever isAuthenticated changes
+    console.log('Login:', isAuthenticated);
+    // Redirect if already authenticated
+    if (isAuthenticated) {
+      router.push('/dashboard');
+    }
+  }, [isAuthenticated, router]);
 
   const {
     register,
@@ -36,11 +47,11 @@ export default function LoginPage() {
 
   const onSubmit = async (data: LoginFormData) => {
     setIsSubmitting(true);
-    
+
     try {
       await login(data);
       success('Login successful!');
-      router.push('/dashboard');
+      // Redirect will be handled by useEffect above
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Invalid credentials';
       error('Login failed', errorMessage);
@@ -50,7 +61,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-[#128C7E] to-[#075E54] p-4">
+    <div className="flex min-h-screen items-center justify-center bg-linear-to-br from-[#128C7E] to-[#075E54] p-4">
       <Card className="w-full max-w-md">
         <CardHeader className="space-y-1 text-center">
           <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-[#128C7E]">
