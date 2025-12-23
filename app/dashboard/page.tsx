@@ -11,6 +11,7 @@ import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { api } from '@/lib/api';
+import { apiClient } from '@/lib/api-client';
 import { LineChart, Line, PieChart, Pie, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 
 interface DashboardStats {
@@ -115,7 +116,7 @@ export default function DashboardPage() {
   const loadDashboardStats = async () => {
     try {
       setLoading(true);
-      const data = await api.getDashboardStats?.();
+      const data = await apiClient.get<DashboardStats>('/dashboard/stats');
       setStats(data);
     } catch (error) {
       setError('Failed to load dashboard data');

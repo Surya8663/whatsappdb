@@ -1,7 +1,7 @@
 # WhatsApp Business Dashboard
 
 A modern, full-featured dashboard for managing WhatsApp Business communications. Built with Next.js 14+, TypeScript, Tailwind CSS, and Shadcn UI.
-
+specifically(Next.js 16.1.1)
 ## 🚀 Features
 
 - **Dashboard**: Overview of key metrics and recent activity
@@ -97,7 +97,7 @@ cp .env.local.example .env.local
 Edit `.env.local` and configure your environment variables:
 ```env
 NEXT_PUBLIC_APP_NAME=WhatsApp Business Dashboard
-NEXT_PUBLIC_API_URL=http://localhost:3001/api
+NEXT_PUBLIC_API_URL=https://whatsapp-backend-fci4.onrender.com
 ```
 
 4. Run the development server:

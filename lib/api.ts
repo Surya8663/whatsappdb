@@ -28,6 +28,12 @@ export interface DashboardStats {
   campaigns_change: string;
   messages_change: string;
 }
+export interface CreateCampaignPayload {
+  name: string;
+  template: string;
+  contacts_sheet?: string;
+  scheduled_for?: Date;
+}
 
 export const api = {
   async getDashboardStats(): Promise<DashboardStats> {
@@ -93,18 +99,19 @@ export const api = {
     ];
   },
   
-  async createCampaign(data: Partial<Campaign>): Promise<Campaign> {
-    return {
-      ...data,
-      id: Math.random().toString(36).substr(2, 9),
-      contacts_count: data.contacts_count || 0,
-      sent_count: 0,
-      delivered_count: 0,
-      read_count: 0,
-      status: 'draft',
-      created_at: new Date().toISOString()
-    } as Campaign;
-  },
+  async createCampaign(data: CreateCampaignPayload): Promise<Campaign> {
+  return {
+    id: Math.random().toString(36).substr(2, 9),
+    name: data.name,
+    template: data.template,
+    contacts_count: 0,
+    sent_count: 0,
+    delivered_count: 0,
+    read_count: 0,
+    status: 'draft',
+    created_at: new Date().toISOString()
+  };
+},
   
   async updateCampaign(id: string, data: Partial<Campaign>): Promise<Campaign> {
     const campaigns = await this.getCampaigns();

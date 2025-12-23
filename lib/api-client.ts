@@ -1,5 +1,13 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosError } from 'axios';
-import { API_BASE_URL, STORAGE_KEYS } from './constants';
+
+// Update this to your deployed backend URL
+export const API_BASE_URL = "https://whatsapp-backend-fci4.onrender.com";
+
+// Storage keys
+export const STORAGE_KEYS = {
+  token: "token",
+  user: "user",
+};
 
 class ApiClient {
   private client: AxiosInstance;
@@ -32,36 +40,29 @@ class ApiClient {
     this.client.interceptors.response.use(
       (response) => response,
       async (error: AxiosError) => {
-        const originalRequest = error.config as AxiosRequestConfig & { _retry?: boolean };
+        // Temporarily disable refresh token logic since backend has no JWT yet
+        // const originalRequest = error.config as AxiosRequestConfig & { _retry?: boolean };
+        // if (error.response?.status === 401 && !originalRequest._retry) {
+        //   originalRequest._retry = true;
+        //   try {
+        //     const refreshToken = this.getRefreshToken();
+        //     if (refreshToken) {
+        //       const response = await axios.post(`${API_BASE_URL}/auth/refresh`, { refreshToken });
+        //       const { token } = response.data;
+        //       this.setToken(token);
+        //       if (originalRequest.headers) {
+        //         originalRequest.headers.Authorization = `Bearer ${token}`;
+        //       }
+        //       return this.client(originalRequest);
+        //     }
+        //   } catch (refreshError) {
+        //     this.clearAuth();
+        //     if (typeof window !== 'undefined') window.location.href = '/login';
+        //     return Promise.reject(refreshError);
+        //   }
+        // }
 
-        if (error.response?.status === 401 && !originalRequest._retry) {
-          originalRequest._retry = true;
-
-          try {
-            const refreshToken = this.getRefreshToken();
-            if (refreshToken) {
-              const response = await axios.post(`${API_BASE_URL}/auth/refresh`, {
-                refreshToken,
-              });
-
-              const { token } = response.data;
-              this.setToken(token);
-
-              if (originalRequest.headers) {
-                originalRequest.headers.Authorization = `Bearer ${token}`;
-              }
-
-              return this.client(originalRequest);
-            }
-          } catch (refreshError) {
-            this.clearAuth();
-            if (typeof window !== 'undefined') {
-              window.location.href = '/login';
-            }
-            return Promise.reject(refreshError);
-          }
-        }
-
+        // Simply reject the error for now
         return Promise.reject(error);
       }
     );

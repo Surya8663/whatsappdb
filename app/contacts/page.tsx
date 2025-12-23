@@ -17,6 +17,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { MessageSquare } from 'lucide-react';
 import {
   Plus,
@@ -36,7 +37,6 @@ import {
   Eye,
   Users
 } from 'lucide-react';
-import { api } from '../../lib/api';
 import { format } from 'date-fns';
 import * as XLSX from 'xlsx';
 
@@ -432,7 +432,7 @@ const loadContacts = async () => {
                     <TableHead className="w-12">
                       <Checkbox
                         checked={selectedContacts.length === filteredContacts.length && filteredContacts.length > 0}
-                        onCheckedChange={handleSelectAll}
+                        onCheckedChange={(checked) => handleSelectAll(checked === true)}
                       />
                     </TableHead>
                     <TableHead>Contact</TableHead>

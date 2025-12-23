@@ -71,7 +71,7 @@ export default function CampaignsPage() {
   const loadCampaigns = async () => {
     try {
       setLoading(true);
-      const data = await api.getCampaigns();
+      const data = await api.getCampaigns?.() ?? [];
       setCampaigns(data);
     } catch (error) {
       console.error('Failed to load campaigns:', error);
@@ -82,7 +82,7 @@ export default function CampaignsPage() {
 
   const loadTemplates = async () => {
     try {
-      const data = await api.getTemplates();
+      const data = await api.getTemplates?.() ?? [];
       setTemplates(data);
     } catch (error) {
       console.error('Failed to load templates:', error);
@@ -107,20 +107,25 @@ export default function CampaignsPage() {
   };
 
   const handleCreateCampaign = async () => {
-    try {
-      const campaign = await api.createCampaign({
-        name: formData.name,
-        template: formData.template
-      });
-      
-      setCampaigns(prev => [campaign, ...prev]);
-      setFormData({ name: '', template: '', contacts_sheet: '' });
-      setSelectedDate(undefined);
-      setShowCreateDialog(false);
-    } catch (error) {
-      console.error('Failed to create campaign:', error);
-    }
-  };
+  try {
+    const campaign = await api.createCampaign?.({
+      name: formData.name,
+      template: formData.template,
+      contacts_sheet: formData.contacts_sheet,
+      scheduled_for: selectedDate
+    });
+
+    if (!campaign) return;
+
+    setCampaigns(prev => [campaign, ...prev]);
+    setFormData({ name: '', template: '', contacts_sheet: '' });
+    setSelectedDate(undefined);
+    setShowCreateDialog(false);
+  } catch (error) {
+    console.error('Failed to create campaign:', error);
+  }
+};
+
 
   const handleCampaignAction = async (campaignId: string, action: 'start' | 'pause' | 'delete') => {
     try {

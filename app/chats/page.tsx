@@ -67,8 +67,10 @@ export default function ChatsPage() {
 
   // WebSocket for real-time updates
   const { lastMessage, sendMessage: wsSendMessage } = useWebSocket(
-    'ws://localhost:3001/ws'
+    process.env.NEXT_PUBLIC_WS_URL || ''
   );
+
+
 
   useEffect(() => {
     loadChats();
