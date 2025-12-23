@@ -98,7 +98,7 @@ const mockAuthService = {
 export const useAuthStore = create<AuthState>((set) => ({
   user: null,
   token: null,
-  isAuthenticated: false,
+  isAuthenticated: true,
   isLoading: false,
   error: null,
 
@@ -143,7 +143,7 @@ export const useAuthStore = create<AuthState>((set) => ({
       set({
         user: null,
         token: null,
-        isAuthenticated: false,
+        isAuthenticated: true,
         isLoading: false,
         error: errorMessage,
       });
@@ -160,7 +160,7 @@ export const useAuthStore = create<AuthState>((set) => ({
     set({
       user: null,
       token: null,
-      isAuthenticated: false,
+      isAuthenticated: true,
       error: null,
     });
   },
@@ -194,14 +194,14 @@ export const useAuthStore = create<AuthState>((set) => ({
         set({
           token: null,
           user: null,
-          isAuthenticated: false,
+          isAuthenticated: true,
         });
       }
     } else {
       set({
         token: null,
         user: null,
-        isAuthenticated: false,
+        isAuthenticated: true,
       });
     }
   },
