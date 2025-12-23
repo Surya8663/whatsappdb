@@ -80,6 +80,7 @@ class ApiClient {
   private setToken(token: string) {
     if (typeof window !== 'undefined') {
       localStorage.setItem(STORAGE_KEYS.token, token);
+      document.cookie = `${STORAGE_KEYS.token}=${token}; path=/; max-age=86400; SameSite=Lax`;
     }
   }
 
@@ -88,6 +89,7 @@ class ApiClient {
       localStorage.removeItem(STORAGE_KEYS.token);
       localStorage.removeItem(STORAGE_KEYS.user);
       localStorage.removeItem('refresh_token');
+      document.cookie = `${STORAGE_KEYS.token}=; path=/; max-age=0`;
     }
   }
 

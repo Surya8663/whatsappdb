@@ -22,6 +22,8 @@ export const setAuthData = (token: string, user: User) => {
   if (typeof window === 'undefined') return;
   localStorage.setItem(STORAGE_KEYS.token, token);
   localStorage.setItem(STORAGE_KEYS.user, JSON.stringify(user));
+  // Set cookie for middleware
+  document.cookie = `${STORAGE_KEYS.token}=${token}; path=/; max-age=86400; SameSite=Lax`;
 };
 
 export const clearAuthData = () => {
@@ -29,6 +31,8 @@ export const clearAuthData = () => {
   localStorage.removeItem(STORAGE_KEYS.token);
   localStorage.removeItem(STORAGE_KEYS.user);
   localStorage.removeItem('refresh_token');
+  // Clear cookie
+  document.cookie = `${STORAGE_KEYS.token}=; path=/; max-age=0`;
 };
 
 export const isAuthenticated = (): boolean => {

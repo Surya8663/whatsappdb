@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { AxiosError } from 'axios';
 import { User, LoginCredentials } from '@/types';
 import { apiClient } from '@/lib/api-client';
 import {
@@ -51,10 +52,11 @@ export const useAuthStore = create<AuthState>((set) => ({
         isLoading: false,
         error: null,
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const err = error as AxiosError<{ message: string }>;
       const errorMessage =
-        error?.response?.data?.message ||
-        error?.message ||
+        err.response?.data?.message ||
+        err.message ||
         'Login failed';
 
       set({
